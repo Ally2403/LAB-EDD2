@@ -59,19 +59,34 @@ class AVLTree:
             self.pre_order(node.left)
             self.pre_order(node.right)
     
-    def generateSongsTree(self, name, artistas, duracion, popularidad):
+    def generateSongsTree(self, name, artistas, duracion, popularidad, artistsTree):
         new_node = CancionClass.Cancion(name, artistas, duracion, popularidad)
-        if self.root is None:
-            self.root = new_node
-            print(f"La raíz ha sido añadida {new_node.ID}")
-        else:
-            self.root = self.addNode(self.root, new_node)
-            
 
-    def generateArtistsTree(self, name):
-        new_node = ArtistClass.Artist(name)
+        # Agregar artistas al árbol sin duplicarlos
+        for artist in artistas:
+            if artistsTree.search(artistsTree.root, artist) is None:
+                artistsTree.generateArtistsTree(artist)
+
+        # Agregar canción al árbol
         if self.root is None:
             self.root = new_node
             print(f"La raíz ha sido añadida {new_node.ID}")
         else:
-            self.root = self.addNode(self.root, new_node)
+            self.root = self.addNode(self.root, new_node)      
+
+    def generateArtistsTree(self, artist):
+        if self.root is None:
+            self.root = artist
+            print(f"La raíz ha sido añadida {artist.ID}")
+        else:
+            self.root = self.addNode(self.root, artist)
+
+    def search(self, node, target):
+        if node is None:
+            return None
+        elif node.ID == target.ID:  # Compara por valor, no por referencia
+            return node
+        elif target.ID < node.ID:
+            return self.search(node.left, target)
+        else:
+            return self.search(node.right, target)

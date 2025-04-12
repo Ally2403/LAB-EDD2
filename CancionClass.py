@@ -13,4 +13,4 @@ class Cancion:
         Cancion._id_counter += 1  # Incrementar el contador para la siguiente canción
     
     def __str__(self):
-        return f"{self.ID}: {self.name} - {', '.join(self.artists)} ({self.duracion}s, Popularidad: {self.popularidad})"
+        return f"{self.ID}: {self.name} - FALTAN ARTISTAS - ({self.duracion}s, Popularidad: {self.popularidad})"
