@@ -40,6 +40,43 @@ class AVLTree:
         
         return root
     
+    def addNodePopularity(self, root, new_node):
+        if root is None:
+            return new_node
+        
+        if root.popularidad == new_node.popularidad and root.ID == new_node.ID:
+            print("El elemento ya está")
+            return root
+        
+        if new_node.popularidad > root.popularidad:
+            root.right = self.addNodePopularity(root.right, new_node)
+        elif new_node.popularidad < root.popularidad:
+            root.left = self.addNodePopularity(root.left, new_node)
+        else:
+            # Si la popularidad es igual, se utiliza el ID como criterio de desempate.
+            if new_node.ID > root.ID:
+                root.right = self.addNodePopularity(root.right, new_node)
+            else:
+                root.left = self.addNodePopularity(root.left, new_node)
+        
+        root.balance = self.height(root.left) - self.height(root.right)
+        
+        if root.balance == 2:
+            self.rotaciones += 1
+            if root.left.balance == -1:
+                self.rotaciones += 1
+                root.left = self.rotate_right(root.left)
+            return self.rotate_left(root)
+        
+        if root.balance == -2:
+            self.rotaciones += 1
+            if root.right.balance == 1:
+                self.rotaciones += 1
+                root.right = self.rotate_left(root.right)
+            return self.rotate_right(root)
+        
+        return root
+    
     def rotate_right(self, node):
         aux = node.right
         node.right = aux.left
@@ -67,8 +104,9 @@ class AVLTree:
             self.pre_order(node.left)
             self.pre_order(node.right)
     
-    def generateSongsTree(self, name, artistas, duracion, popularidad, artistsTree):
+    def generateSongsTree(self, name, artistas, duracion, popularidad, artistsTree, popularityTree):
         new_node = CancionClass.Cancion(name, artistas, duracion, popularidad)
+        new_node_popularity = CancionClass.Cancion(name, artistas, duracion, popularidad)
                 # Agregar artistas al árbol sin duplicarlos
         for artist in artistas:
             artistsTree.generateArtistsTree(artist)
@@ -76,14 +114,14 @@ class AVLTree:
         # Agregar canción al árbol
         if self.root is None:
             self.root = new_node
-            print(f"La raíz ha sido añadida {new_node.ID}")
+            popularityTree.root = new_node_popularity
         else:
-            self.root = self.addNode(self.root, new_node)      
+            self.root = self.addNode(self.root, new_node)  
+            popularityTree.root = popularityTree.addNodePopularity(popularityTree.root, new_node_popularity)  
 
     def generateArtistsTree(self, artist):
         if self.root is None:
             self.root = artist
-            print(f"La raíz ha sido añadida {artist.ID}")
         else:
             self.root = self.addNode(self.root, artist)
 

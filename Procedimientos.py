@@ -5,11 +5,21 @@ class Process:
     #PUNTO 1 = ¿Qué artista tiene mayor número de canciones en la playlist?
     #Contador es un diccionario
     def contar_canciones_por_artista(self, songsTree, artistsTree, songsTreeRoot, artistsTreeRoot, contador):
+        """
+        Recorre el árbol de canciones y cuenta cuántas veces aparece cada artista en la playlist.
+
+        Parámetros:
+        - songsTree: Árbol AVL de canciones.
+        - artistsTree: Árbol AVL de artistas.
+        - songsTreeRoot: Nodo raíz del árbol de canciones.
+        - artistsTreeRoot: Nodo raíz del árbol de artistas.
+        - contador: Diccionario donde se almacena la cantidad de canciones por artista.
+        """
         if songsTreeRoot is None:
             return
         
+        # Recorre los artistas por cada canción
         for artist in songsTreeRoot.artists:
-            if(artistsTree.search(artistsTree.root, artist) != None): #AÑADIR MÉTODO SEARCH
                 if artistsTree.search(artistsTree.root, artist) in contador:
                     contador[artist] += 1 #Si ya está en el diccionario este artista, le suma 1
                 else:
@@ -19,6 +29,15 @@ class Process:
         self.contar_canciones_por_artista(songsTree, artistsTree, songsTreeRoot.right, artistsTreeRoot, contador)
 
     def artista_con_mas_canciones(self, songsTree, artistsTree):
+        """
+        Determina qué artista tiene más canciones registradas en la playlist.
+        
+        Parámetros:
+        - songsTree: Árbol AVL de canciones.
+        - artistsTree: Árbol AVL de artistas.
+        Retorna:
+        - El nombre del artista con mayor número de canciones o None si el árbol está vacío.
+        """
         contador = {}
         self.contar_canciones_por_artista(songsTree, artistsTree, songsTree.root, artistsTree.root, contador)
         
@@ -26,7 +45,6 @@ class Process:
             return None  # Si el árbol está vacío
         
         return max(contador, key=contador.get)
-                            #Devuelve la clave del artista con más canciones
 
     #Punto 2 = ¿Qué artista tiene mayor índice de popularidad? (Suma de popularidades de las canciones del artista)
     def contar_popularidad_artistas(self, songsTree, artistsTree, songsTreeRoot, artistsTreeRoot, contador):
@@ -151,3 +169,30 @@ class Process:
             songs = songs + ", " + str(cancion)
         return songs
     
+    #Punto 9 = Implementa un algoritmo que permita obtener las N canciones más populares de la playlist en tiempo O(log(n) + N).
+    def obtener_n_canciones_populares(self, arbol_popularidad, N: int):
+        """
+        Retorna una lista con las N canciones más populares.
+
+        Como parámetros tiene el arbol de canciones organizado por popularidad y
+        el número de canciones populares a buscar.
+
+        La complejidad del algoritmo es O(log(n) + N).
+        """
+        resultado = []
+        stack = [] # Pila auxiliar
+        current = arbol_popularidad.root
+
+        while (stack or current) and len(resultado) < N:
+            # Mientras current no sea None, vamos siempre al subárbol derecho.
+            if current:
+                stack.append(current) # Nodos visitados
+                current = current.right # Mayor popularidad
+            else:
+                # Cuando current es None, se saca el nodo en la cima de la pila
+                current = stack.pop()
+                resultado.append(current)
+                # Luego se recorre el subárbol izquierdo
+                current = current.left
+
+        return resultado

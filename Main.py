@@ -3,6 +3,7 @@ import Procedimientos
 import ArtistClass
 
 songsTree = AVL.AVLTree()
+popularityTree = AVL.AVLTree()
 # Diccionario para evitar instancias duplicadas de artistas
 artistas_unicos = {}
 
@@ -28,15 +29,15 @@ songs_data = [
 
 artistsTree = AVL.AVLTree()
 for song in songs_data:
-    songsTree.generateSongsTree(song[0], song[1], song[2], song[3], artistsTree)
+    songsTree.generateSongsTree(song[0], song[1], song[2], song[3], artistsTree, popularityTree)
 
 # Imprimir el árbol en preorden
-print("\nÁrbol en Preorden:")
+print("\nÁrbol de canciones en Preorden:")
 songsTree.pre_order(songsTree.root)
 
 
 # Imprimir el árbol en preorden
-print("\nÁrbol en Preorden:")
+print("\nÁrbol de artistas en Preorden:")
 artistsTree.pre_order(artistsTree.root)
 
 print()
@@ -60,3 +61,15 @@ print(f"Las canciones con duración mayor al promedio son {cancionesMayores}")
 print()
 cancionesArtista = process.canciones_artista(songsTree, artistsTree, "Artist A")
 print(f"Las canciones del artista A son {cancionesArtista}")
+print()
+# Imprimir el árbol en preorden
+print("\nÁrbol de popularidad en Preorden:")
+popularityTree.pre_order(popularityTree.root)
+print()
+N = 8
+print(f"Las {N} canciones más populares son")
+lista_canciones = process.obtener_n_canciones_populares(popularityTree, N)
+    
+# Ahora 'lista_canciones' contendrá las 5 canciones de mayor popularidad en la playlist.
+for cancion in lista_canciones:
+    print(cancion)
