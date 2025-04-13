@@ -4,6 +4,10 @@ import ArtistClass
 class AVLTree:
     def __init__(self):
         self.root = None
+        self.rotaciones = 0
+
+    def getRotaciones(self):
+        return self.rotaciones
 
     def addNode(self, root, new_node):
         if root is None:
@@ -21,12 +25,16 @@ class AVLTree:
         root.balance = self.height(root.left) - self.height(root.right)
         
         if root.balance == 2:
+            self.rotaciones += 1
             if root.left.balance == -1:
+                self.rotaciones += 1
                 root.left = self.rotate_right(root.left)
             return self.rotate_left(root)
         
         if root.balance == -2:
+            self.rotaciones += 1
             if root.right.balance == 1:
+                self.rotaciones += 1
                 root.right = self.rotate_left(root.right)
             return self.rotate_right(root)
         
@@ -61,11 +69,9 @@ class AVLTree:
     
     def generateSongsTree(self, name, artistas, duracion, popularidad, artistsTree):
         new_node = CancionClass.Cancion(name, artistas, duracion, popularidad)
-
-        # Agregar artistas al árbol sin duplicarlos
+                # Agregar artistas al árbol sin duplicarlos
         for artist in artistas:
-            if artistsTree.search(artistsTree.root, artist) is None:
-                artistsTree.generateArtistsTree(artist)
+            artistsTree.generateArtistsTree(artist)
 
         # Agregar canción al árbol
         if self.root is None:
@@ -90,3 +96,14 @@ class AVLTree:
             return self.search(node.left, target)
         else:
             return self.search(node.right, target)
+        
+    def searchByName(self, node, name):
+        if node is None:
+            return None
+        elif node.name == name:  # Compara por valor, no por referencia
+            return node
+        
+        left_result = self.searchByName(node.left, name)
+        if left_result:
+            return left_result
+        return self.searchByName(node.right, name)
