@@ -3,7 +3,6 @@ import json
 import ArtistClass
 from TreeVisualizer import AVLTreeVisualizer
 
-
 songsTree = AVL.AVLTree()
 artistsTree = AVL.AVLTree()
 
@@ -37,10 +36,9 @@ print("\nCanciones: ")
 print("\nÁrbol en Preorden:")
 songsTree.pre_order(songsTree.root)
 """
-print("\nArtistas: ")
+# songsTree.pre_order(songsTree.root)
 
-print("\nÁrbol en Preorden:")
-# artistsTree.pre_order(artistsTree.root)
-
-visualizer = AVLTreeVisualizer(artistsTree)
-visualizer.render("AVL1")
+visualizerArtistas = AVLTreeVisualizer(artistsTree, False, False)
+visualizerArtistas.render("AVL1")
+visualizerCanciones = AVLTreeVisualizer(songsTree, True, True)
+visualizerCanciones.render("AVL2")
