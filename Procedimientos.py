@@ -52,7 +52,6 @@ class Process:
             return contador
 
         for artist in songsTreeRoot.artists:
-            if(artistsTree.search(artistsTree.root, artist) != None): #AÑADIR MÉTODO SEARCH
                 if artistsTree.search(artistsTree.root, artist) in contador:
                     contador[artist] += songsTreeRoot.popularidad  # Si el artista ya existe, sumamos la popularidad de esta cancion
                 else:

@@ -1,6 +1,6 @@
 import CancionClass
 import ArtistClass
-
+import json
 class AVLTree:
     def __init__(self):
         self.root = None
@@ -13,11 +13,10 @@ class AVLTree:
         if root is None:
             return new_node
         
-        if root.ID == new_node.ID:
-            print("El elemento ya está")
+        if root.uniqueID == new_node.uniqueID:
             return root
         
-        if new_node.ID > root.ID:
+        if new_node.uniqueID > root.uniqueID:
             root.right = self.addNode(root.right, new_node)
         else:
             root.left = self.addNode(root.left, new_node)
@@ -44,8 +43,7 @@ class AVLTree:
         if root is None:
             return new_node
         
-        if root.popularidad == new_node.popularidad and root.ID == new_node.ID:
-            print("El elemento ya está")
+        if root.popularidad == new_node.popularidad and root.uniqueID == new_node.uniqueID:
             return root
         
         if new_node.popularidad > root.popularidad:
@@ -53,8 +51,8 @@ class AVLTree:
         elif new_node.popularidad < root.popularidad:
             root.left = self.addNodePopularity(root.left, new_node)
         else:
-            # Si la popularidad es igual, se utiliza el ID como criterio de desempate.
-            if new_node.ID > root.ID:
+            # Si la popularidad es igual, se utiliza el uniqueID como criterio de desempate.
+            if new_node.uniqueID > root.uniqueID:
                 root.right = self.addNodePopularity(root.right, new_node)
             else:
                 root.left = self.addNodePopularity(root.left, new_node)
@@ -104,12 +102,9 @@ class AVLTree:
             self.pre_order(node.left)
             self.pre_order(node.right)
     
-    def generateSongsTree(self, name, artistas, duracion, popularidad, artistsTree, popularityTree):
-        new_node = CancionClass.Cancion(name, artistas, duracion, popularidad)
-        new_node_popularity = CancionClass.Cancion(name, artistas, duracion, popularidad)
-                # Agregar artistas al árbol sin duplicarlos
-        for artist in artistas:
-            artistsTree.generateArtistsTree(artist)
+    def generateSongsTree(self, id, name, artistas, duracion, popularidad, popularityTree):
+        new_node = CancionClass.Cancion(id, name, artistas, duracion, popularidad)
+        new_node_popularity = CancionClass.Cancion(id, name, artistas, duracion, popularidad)
 
         # Agregar canción al árbol
         if self.root is None:
@@ -128,9 +123,9 @@ class AVLTree:
     def search(self, node, target):
         if node is None:
             return None
-        elif node.ID == target.ID:  # Compara por valor, no por referencia
+        elif node.uniqueID == target.uniqueID:  # Compara por valor, no por referencia
             return node
-        elif target.ID < node.ID:
+        elif target.uniqueID < node.uniqueID:
             return self.search(node.left, target)
         else:
             return self.search(node.right, target)
@@ -145,3 +140,17 @@ class AVLTree:
         if left_result:
             return left_result
         return self.searchByName(node.right, name)
+    
+    def convertAscii(self, string):
+        ascii = ""
+        # Se carga el archivo JSON que contiene los valores en ASCII de cada letra
+        with open('asciiTable.json', 'r', encoding='utf-8') as file:
+            asciiFile = json.load(file)
+        # Se recorre el string, se obtiene el valor de cada letra en ascii y se concatena a un string
+        for i in range(len(string)):
+            numero = int(asciiFile[string[i]])
+            ascii += str(numero)
+
+        # Se convierte el string en un numero entero y se retorna como id
+        numAscii = int(ascii)
+        return numAscii
