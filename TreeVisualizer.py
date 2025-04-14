@@ -16,21 +16,21 @@ class AVLTreeVisualizer:
             fontsize='20', 
             fontname='Helvetica',
             rankdir='TB',         # De arriba hacia abajo
-            ranksep='1.8',        # Separación vertical
-            nodesep='1.5'         # Separación horizontal
+            ranksep='1.8',        # Separación vertical entre nodos
+            nodesep='1.5'         # Separación horizontal entre nodos
             )
-        
+
     def _add_nodes_edges(self, node):
         if node is None:
             return
 
-        node_id = str(node.uniqueID)
+        node_id = str(node.uniqueID) # Id unico
 
         label = f"{(node.name)}"
 
         tooltip = ""
         if self.mostrar_tooltip and self.es_arbol_artistas:
-            tooltip = f"Duración: {round(node.duracion / 60000, 2)} minutos\nPopularidad: {node.popularidad}" # COMENTAR
+            tooltip = f"Duración: {round(node.duracion / 60000, 2)} minutos\nPopularidad: {node.popularidad}" # Mensaje al hacer hover sobre un nodos
         else:
             tooltip = f"ID: {node.uniqueID}"
 
@@ -47,8 +47,7 @@ class AVLTreeVisualizer:
             tooltip = tooltip,
             _attributes={'id': node_id, 'title': tooltip}
         )
-
-        # Nodos ubicados a la izquierda de su padre
+        #Nodos ubicados a la izquierda de su padre
         if node.left:
             self.dot.edge(node_id, str(node.left.uniqueID), color='blue', penwidth='4')
             self._add_nodes_edges(node.left)

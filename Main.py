@@ -26,6 +26,8 @@ artistas_unicos = {} #lista de artistas totales del árbol como objetos
 for i in range(len(jsonPlaylist)):
     for j in range(len(jsonPlaylist[i]['items'])):
         artistList = []
+        #if jsonPlaylist[i]['items'][j]['tracks'] == None:
+        #    continue
         for k in range(len(jsonPlaylist[i]['items'][j]['track']['artists'])):
             artist = jsonPlaylist[i]['items'][j]['track']['artists'][k]['name']
             artistID = jsonPlaylist[i]['items'][j]['track']['artists'][k]['id']
@@ -53,13 +55,13 @@ for i in range(len(jsonPlaylist)):
 
 print()
 process = Procedimientos.Process()
-artista_mas_popular = process.artista_con_mas_canciones(songsTree, artistsTree)
+artista_mas_popular = process.artista_con_mas_canciones(songsTree)
 print(f"El artista con más canciones es: {artista_mas_popular}")
 print()
-artistaMayorPopularidad = process.artista_mas_popular(songsTree, artistsTree)
+artistaMayorPopularidad = process.artista_mas_popular(songsTree)
 print(f"El artista con mayor popularidad es: {artistaMayorPopularidad}")
 print()
-nivelesMayorPopularidad = process.mostrar_niveles_mayor_popularidad(songsTree, artistsTree)
+nivelesMayorPopularidad = process.mostrar_niveles_mayor_popularidad(songsTree)
 print(f"El artista con mayor popularidad {artistaMayorPopularidad} tiene sus canciones en los niveles {nivelesMayorPopularidad}")
 print()
 alturaSongs, alturaArtists = process.alturas(songsTree, artistsTree)

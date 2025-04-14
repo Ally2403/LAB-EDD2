@@ -10,6 +10,16 @@ class AVLTree:
         return self.rotaciones
 
     def addNode(self, root, new_node):
+        """
+        Agrega un nuevo nodo al árbol AVL y realiza las rotaciones necesarias para mantener el balance.
+        
+        Parámetros:
+        - root: Nodo raíz del árbol (o subárbol) actual.
+        - new_node: Nuevo nodo a insertar en el árbol.
+        
+        Retorna:
+        - La nueva raíz del subárbol después de la inserción y posibles rotaciones.
+        """
         if root is None:
             return new_node
         
