@@ -299,7 +299,7 @@ class Process:
             else:
                 # Cuando current es None, se saca el nodo en la cima de la pila
                 current = stack.pop()
-                resultado.append(current)
+                resultado.append(current.name)
                 # Luego se recorre el subárbol izquierdo
                 current = current.left
 
